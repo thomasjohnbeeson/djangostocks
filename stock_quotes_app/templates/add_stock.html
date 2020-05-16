@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Add Stock...</h1>
+
+    <form action="{% url 'add_stock' %}" method="POST" class="form-inline my-2 my-lg-0">
+            {% csrf_token %}
+          <input class="form-control mr-sm-2" type="search" placeholder="Search symbol" aria-label="Search symbol" name="ticker">
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Add Stock</button>
+        </form>
+
+    <br/>
+    <br/>
+
+
+<table class="table table-light table-striped table-bordered table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Company Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">PrevClose</th>
+      <th scope="col">Market Cap</th>
+      <th scope="col">YTD change</th>
+      <th scope="col">52w High</th>
+      <th scope="col">52w Low</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  {% if ticker %}
+      <tbody>
+        {% for list_item in output %}
+            <tr>                        
+                <th scope="row">{{ list_item.companyName }}</th>
+                <td>${{ list_item.latestPrice }}</td>
+                <td>${{ list_item.previousClose }}</td>
+                <td>${{ list_item.marketCap }}</td>
+                <td>{{ list_item.ytdChange }}       </td>
+                <td>${{ list_item.week52High }}</td>
+                <td>${{ list_item.week52Low }}</td>
+                <td><a href="{% url 'delete' list_item.ticker.id %}">Delete Stock</a></td>                      
+            </tr>
+            
+        {% endfor %}
+        
+      </tbody>
+  {% endif %}
+
+</table>
+
+    
+{% endblock %}
